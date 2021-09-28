@@ -1,0 +1,11 @@
+{
+  "name": "snapshot-voter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Entreprenerd",
+  "license": "MIT",
+  "dependencies": {
+    "@snapshot-labs/snapshot.js": "^0.2.9",
+    "ethers": "^5.4.7"
+  }
+}
