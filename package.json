@@ -5,7 +5,7 @@
   "author": "Entreprenerd",
   "license": "MIT",
   "dependencies": {
-    "@snapshot-labs/snapshot.js": "^0.2.9",
-    "ethers": "^5.4.7"
+    "@ethersproject/wallet": "^5.4.0",
+    "@snapshot-labs/snapshot.js": "^0.2.9"
   }
 }
