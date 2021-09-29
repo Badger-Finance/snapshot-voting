@@ -1,10 +1,10 @@
-const { Client: OriginalClient } = require("@snapshot-labs/snapshot.js");
+const { Client: BaseClient } = require("@snapshot-labs/snapshot.js");
 const { Wallet } = require("@ethersproject/wallet");
 
 // TODO: Ideally should come from snapshot.js
 const VERSION = "0.1.3";
 
-class Client extends OriginalClient {
+class Client extends BaseClient {
   constructor(address) {
     super(address);
   }
@@ -40,8 +40,8 @@ const vote = async () => {
   const client = new Client();
 
   client.voteViaWallet(wallet, "cvx.eth", {
-    proposal: 18,
-    choice: true,
+    proposal: "QmSb4GBNdGfTyYRpCxoNCu2txPeqiLbz8KTMszanTrsDym",
+    choice: 1,
   });
 };
 
