@@ -1,11 +1,14 @@
 {
   "name": "snapshot-voter",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "author": "Entreprenerd",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.34.0",
     "@ethersproject/wallet": "^5.4.0",
-    "@snapshot-labs/snapshot.js": "^0.2.9"
+    "@snapshot-labs/snapshot.js": "^0.2.9",
+    "graphql": "^15.6.0",
+    "graphql-request": "^3.5.0"
   }
 }

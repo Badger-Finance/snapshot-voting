@@ -1,8 +1,6 @@
 const { Client: BaseClient } = require("@snapshot-labs/snapshot.js");
-const { Wallet } = require("@ethersproject/wallet");
 
-// TODO: Ideally should come from snapshot.js
-const VERSION = "0.1.3";
+const { SNAPSHOT_VERSION } = require("./constants");
 
 class Client extends BaseClient {
   constructor(address) {
@@ -14,7 +12,7 @@ class Client extends BaseClient {
       const msg = {
         address: await wallet.getAddress(),
         msg: JSON.stringify({
-          version: VERSION,
+          version: SNAPSHOT_VERSION,
           timestamp: (Date.now() / 1e3).toFixed(),
           space,
           type: "vote",
@@ -30,19 +28,6 @@ class Client extends BaseClient {
   }
 }
 
-const vote = async () => {
-  // Pk is empty, no worries
-  PRIVATE_KEY =
-    process.env.PRIVATE_KEY ||
-    "511551aa8d8975bdd308282dedb7aca2a6f0cfcd919ba844b94eca7addceae9f";
-  const wallet = new Wallet(PRIVATE_KEY);
+const client = new Client();
 
-  const client = new Client();
-
-  client.voteViaWallet(wallet, "cvx.eth", {
-    proposal: "QmSb4GBNdGfTyYRpCxoNCu2txPeqiLbz8KTMszanTrsDym",
-    choice: 1,
-  });
-};
-
-vote();
+module.exports = { client };
