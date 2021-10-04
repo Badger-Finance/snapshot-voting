@@ -12,7 +12,11 @@ const getAssumeRoleCredentials = async (assumeRoleArn) => {
   };
   try {
     const data = await stsClient.send(new AssumeRoleCommand(params));
-    return data.credentials;
+    return {
+      accessKeyId: data.Credentials.AccessKeyId,
+      secretAccessKey: data.Credentials.SecretAccessKey,
+      sessionToken: data.Credentials.SessionToken,
+    };
   } catch (err) {
     console.log("Error", err);
   }
