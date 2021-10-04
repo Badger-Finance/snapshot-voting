@@ -18,7 +18,7 @@ const getAssumeRoleCredentials = async (assumeRoleArn) => {
       sessionToken: data.Credentials.SessionToken,
     };
   } catch (err) {
-    console.log("Error", err);
+    console.error(err);
   }
 };
 

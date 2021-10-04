@@ -1,43 +1,36 @@
-const { request, gql } = require("graphql-request");
+const assert = require("assert/strict");
+const fs = require("fs");
+const path = require("path");
 
-const { SNAPSHOT_GRAPHQL_ENDPOINT } = require("./constants");
+const { VOTES_DIR } = require("./constants");
+const { getSpace, getProposal } = require("./snapshot");
+const { readJson } = require("./utils");
 
-const queryProposal = async (proposalId) => {
-  const query = gql`
-    query Proposal {
-      proposal(id: "${proposalId}") {
-        id
-        title
-        body
-        type
-        choices
-        start
-        end
-        snapshot
-        state
-        author
-        space {
-          id
-          name
-        }
-      }
-    }
-  `;
-  return await request(SNAPSHOT_GRAPHQL_ENDPOINT, query);
+const getProposalVotes = async (proposalId) => {
+  const space = await getSpace(proposalId);
+  const voteFile = path.join(VOTES_DIR, space, `${proposalId}.json`);
+
+  if (fs.existsSync(voteFile)) {
+    const data = readJson(voteFile);
+    assert.equal(data.proposal, proposalId, "proposalId mismatch");
+    return data.choice;
+  } else {
+    throw new Error(`Voting file doesn't exist: ${voteFile}`);
+  }
 };
 
 const printProposalVotes = async (proposalId, voteWeights) => {
-  const data = await queryProposal(proposalId);
+  const data = await getProposal(proposalId);
   const totalWeight = Object.values(voteWeights).reduce((a, b) => a + b, 0);
 
   votes = {};
   for (const choiceIx of Object.keys(voteWeights)) {
     const votePercent = (100 * voteWeights[choiceIx]) / totalWeight;
-    votes[data.proposal.choices[choiceIx - 1]] = `${votePercent.toFixed(2)}%`; // Snapshot vote payload starts from 1
+    votes[data.choices[choiceIx - 1]] = `${votePercent.toFixed(2)}%`; // Snapshot vote payload starts from 1
   }
   console.log(data);
-  console.log("------Votes------")
+  console.log("------Votes------");
   console.log(votes);
 };
 
-module.exports = { printProposalVotes };
+module.exports = { getProposalVotes, printProposalVotes };

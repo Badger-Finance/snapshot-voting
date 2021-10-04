@@ -2,20 +2,22 @@
 
 ## Usage
 
+Add voting preferences to `votes/<space>/<proposal_id>.json` file.
+
 ### Installation
 
 ```
 yarn install
 ```
 
-### Dry-run
+### Print voting preferences from file
 
 ```
-yarn start
+yarn print --proposal <id>
 ```
 
 ### Vote
 
 ```
-yarn vote
+yarn vote --proposal <id>
 ```

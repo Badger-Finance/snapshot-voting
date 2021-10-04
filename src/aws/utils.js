@@ -10,7 +10,7 @@ const getSecret = async (secretId, secretKey) => {
       new GetSecretValueCommand({ SecretId: secretId })
     );
   } catch (err) {
-    console.log("err", err);
+    console.error(err);
   }
   let secret;
   if ("SecretString" in data) {
