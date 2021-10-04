@@ -20,7 +20,7 @@ const getSecret = async (secretId, secretKey) => {
     const buff = new Buffer(data.SecretBinary, "base64");
     secret = buff.toString("ascii");
   }
-  return secret[secretKey];
+  return JSON.parse(secret)[secretKey];
 };
 
 module.exports = { getSecret };
