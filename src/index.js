@@ -1,21 +1,22 @@
-const { Wallet } = require("@ethersproject/wallet");
+const { program } = require("commander");
 
-const { client } = require("./client");
 const { PROPOSAL_ID } = require("./constants");
-const { getSecret } = require("./aws/utils");
+const { printProposalVotes } = require("./proposal");
+const { getProposalVotes } = require("./utils");
+const vote = require("./vote");
 
-const vote = async () => {
-  privateKey = await getSecret("cvx/voter", "CVX_VOTER_KEY");
-  // privateKey =
-  //   "511551aa8d8975bdd308282dedb7aca2a6f0cfcd919ba844b94eca7addceae9f";
-  const wallet = new Wallet(privateKey);
+const main = async () => {
+  program.option("-v, --vote", "send votes to snapshot");
 
-  client.voteViaWallet(wallet, "cvx.eth", {
-    proposal: PROPOSAL_ID,
-    choice: {
-      1: 1,
-    },
-  });
+  program.parse(process.argv);
+
+  const options = program.opts();
+  const voteWeights = getProposalVotes(PROPOSAL_ID);
+  if (options.vote) {
+    vote(PROPOSAL_ID, voteWeights);
+  } else {
+    printProposalVotes(PROPOSAL_ID, voteWeights);
+  }
 };
 
-vote();
+main();

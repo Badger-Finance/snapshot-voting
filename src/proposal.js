@@ -1,31 +1,43 @@
 const { request, gql } = require("graphql-request");
 
-const { SNAPSHOT_GRAPHQL_ENDPOINT, PROPOSAL_ID } = require("./constants");
+const { SNAPSHOT_GRAPHQL_ENDPOINT } = require("./constants");
 
-const query = gql`
-  query Proposal {
-    proposal(id: "${PROPOSAL_ID}") {
-      id
-      title
-      body
-      type
-      choices
-      start
-      end
-      snapshot
-      state
-      author
-      space {
+const queryProposal = async (proposalId) => {
+  const query = gql`
+    query Proposal {
+      proposal(id: "${proposalId}") {
         id
-        name
+        title
+        body
+        type
+        choices
+        start
+        end
+        snapshot
+        state
+        author
+        space {
+          id
+          name
+        }
       }
     }
+  `;
+  return await request(SNAPSHOT_GRAPHQL_ENDPOINT, query);
+};
+
+const printProposalVotes = async (proposalId, voteWeights) => {
+  const data = await queryProposal(proposalId);
+  const totalWeight = Object.values(voteWeights).reduce((a, b) => a + b, 0);
+
+  votes = {};
+  for (const choiceIx of Object.keys(voteWeights)) {
+    const votePercent = (100 * voteWeights[choiceIx]) / totalWeight;
+    votes[data.proposal.choices[choiceIx - 1]] = `${votePercent.toFixed(2)}%`; // Snapshot vote payload starts from 1
   }
-`;
-
-async function main() {
-  const data = await request(SNAPSHOT_GRAPHQL_ENDPOINT, query);
   console.log(data);
-}
+  console.log("------Votes------")
+  console.log(votes);
+};
 
-main().catch((error) => console.error(error));
+module.exports = { printProposalVotes };
