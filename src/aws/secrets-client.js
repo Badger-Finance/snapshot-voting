@@ -18,6 +18,7 @@ const getAssumeRoleCredentials = async (assumeRoleArn) => {
   }
 };
 
+// TODO: Maybe generate on runtime
 // Set the Secrets Manager Service Object
 const secretsClient = new SecretsManagerClient({
   region: REGION,
