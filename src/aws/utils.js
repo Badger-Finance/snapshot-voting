@@ -1,6 +1,7 @@
 // Import required AWS SDK clients and commands for Node.js
 const { GetSecretValueCommand } = require("@aws-sdk/client-secrets-manager");
-const { secretsClient } = require("./secrets-client");
+
+const secretsClient = require("./secrets-client");
 
 const getSecret = async (secretId, secretKey) => {
   let data;

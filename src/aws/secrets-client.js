@@ -1,9 +1,27 @@
 const { SecretsManagerClient } = require("@aws-sdk/client-secrets-manager");
+const { AssumeRoleCommand } = require("@aws-sdk/client-sts");
 
-const { AWS_REGION } = require("../constants");
+const { REGION, ASSUME_ROLE_ARN } = require("./constants");
+const stsClient = require("./sts-client");
 
-// Set the AWS Region.
-//Set the Secrets Manager Service Object
-const secretsClient = new SecretsManagerClient({ region: AWS_REGION });
+const getAssumeRoleCredentials = async (assumeRoleArn) => {
+  const params = {
+    RoleArn: assumeRoleArn,
+    RoleSessionName: "AssumeRoleSession1",
+    // DurationSeconds: 900,
+  };
+  try {
+    const data = await stsClient.send(new AssumeRoleCommand(params));
+    return data.credentials;
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
 
-module.exports = { secretsClient };
+// Set the Secrets Manager Service Object
+const secretsClient = new SecretsManagerClient({
+  region: REGION,
+  credentials: getAssumeRoleCredentials(ASSUME_ROLE_ARN),
+});
+
+module.exports = secretsClient;
