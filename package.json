@@ -11,5 +11,9 @@
     "commander": "^8.2.0",
     "graphql": "^15.6.0",
     "graphql-request": "^3.5.0"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "vote": "node src/index.js --vote"
   }
 }
